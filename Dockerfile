@@ -3,11 +3,11 @@ FROM debian:jessie-slim
 MAINTAINER phunh
 
 RUN echo 'deb http://ftp.de.debian.org/debian jessie main' >> /etc/apt/sources.list
-RUN echo 'deb http://security.debian.org/debian-security jessie/updates main ' >> /etc/apt/sources.list
 RUN echo 'deb http://ftp.de.debian.org/debian sid main' >> /etc/apt/sources.list
 
-RUN apt-get update
+RUN apt-get update  && apt-get install --assume-yes apt-utils
 
+RUN apt-get 
 RUN apt-get -y install git
 RUN apt-get -y install wget
 RUN apt-get -y install python3.6 python3.6-distutils
