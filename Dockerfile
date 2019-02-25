@@ -1,41 +1,12 @@
-FROM debian:jessie-slim
+FROM alpine:3.9
 
-MAINTAINER phunh
-
-RUN echo 'deb http://ftp.de.debian.org/debian jessie main' >> /etc/apt/sources.list
-RUN echo 'deb http://ftp.de.debian.org/debian sid main' >> /etc/apt/sources.list
-
-RUN apt-get update  && apt-get install --assume-yes apt-utils
-
-RUN apt-get 
-RUN apt-get -y install git
-RUN apt-get -y install wget
-RUN apt-get -y install python3.6 python3.6-distutils
-
-RUN wget https://bootstrap.pypa.io/get-pip.py
-
-RUN python3.6 get-pip.py
-
-RUN rm get-pip.py
-
-RUN cd /usr/local/bin \
-  && rm -f easy_install \
-  && rm -f pip \
-  && rm -f pydoc \
-  && rm -f python
-
-RUN cd /usr/local/bin \
-  && ln -s easy_install-3.6 easy_install \
-  && ln -s pip3.6 pip \
-  && ln -s /usr/bin/pydoc3.6 pydoc \
-  && ln -s /usr/bin/python3.6 python
-
-RUN pip install --upgrade pip
-
-RUN apt-get autoremove
-RUN apt-get autoclean
-
-RUN echo 'alias python=python3.6' >> ~/.bashrc
+RUN apk add --no-cache python3.7.2 && \
+    python3.7.2 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3.7.2 install --upgrade pip setuptools && \
+    if [ ! -e /usr/bin/pip ]; then ln -s pip3 /usr/bin/pip ; fi && \
+    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
+    rm -r /root/.cache
 
 RUN pip install awscli
 
